@@ -1,12 +1,5 @@
-<<<<<<< HEAD
-requests
-gspread>=6.0.0
-oauth2client
-gspread-formatting
-=======
 gspread
 oauth2client
 requests
 gspread-formatting
 python-dotenv
->>>>>>> 532937e (Initial commit: Cryptocurrency price tracker with Google Sheets integration)
