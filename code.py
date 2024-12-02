@@ -11,16 +11,28 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-API_KEY = '5cb5d0bd-d35a-4d0b-8c7a-58dc7c1a598b'
-SPREADSHEET_KEY = '1vXTteq2185As4JFhXtyL-m2q_x2lUg-FmiFTW2-6Nf0'
-UPDATE_INTERVAL = 300
+# Get credentials and keys from environment variables
+API_KEY = os.getenv('CMC_API_KEY')
+SPREADSHEET_KEY = os.getenv('SPREADSHEET_KEY')
+UPDATE_INTERVAL = int(os.getenv('UPDATE_INTERVAL', '300'))  # Default to 300 seconds if not specified
 
-# Load credentials from the environment variable
-CREDENTIALS = json.loads(os.getenv('CREDENTIALS'))
+# Try to parse credentials safely
+try:
+    CREDENTIALS = json.loads(os.getenv('CREDENTIALS', '{}'))
+except json.JSONDecodeError:
+    print("Invalid CREDENTIALS format in environment variable")
+    sys.exit(1)
 
 API_URL = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
 
 IST = timezone(timedelta(hours=5, minutes=30))
+
+# Validate environment variables
+required_env_vars = ['CMC_API_KEY', 'SPREADSHEET_KEY', 'CREDENTIALS']
+missing_vars = [var for var in required_env_vars if not os.getenv(var)]
+if missing_vars:
+    print(f"Missing required environment variables: {', '.join(missing_vars)}")
+    sys.exit(1)
 
 def fetch_live_data():
     headers = {
@@ -40,9 +52,12 @@ def fetch_live_data():
         return data['data']
     except Exception as e:
         print(f"Error fetching data: {e}")
-        sys.exit(1)
+        return None
 
 def analyze_data(data):
+    if not data:
+        return None
+
     top_5 = sorted(data, key=lambda x: x['quote']['USD']['market_cap'], reverse=True)[:5]
 
     total_price = sum(item['quote']['USD']['price'] for item in data)
@@ -68,9 +83,13 @@ def authenticate_google_sheet():
         return sheet
     except Exception as e:
         print(f"Error authenticating Google Sheets: {e}")
-        sys.exit(1)
+        return None
 
 def update_google_sheet(sheet, data, analysis):
+    if not sheet or not data or not analysis:
+        print("Insufficient data to update sheet")
+        return
+
     try:
         sheet.clear()
 
@@ -122,11 +141,20 @@ def update_google_sheet(sheet, data, analysis):
 
 def main():
     sheet = authenticate_google_sheet()
+    if not sheet:
+        print("Failed to authenticate Google Sheet. Exiting.")
+        sys.exit(1)
+
     while True:
-        data = fetch_live_data()
-        analysis = analyze_data(data)
-        update_google_sheet(sheet, data, analysis)
-        time.sleep(UPDATE_INTERVAL)
+        try:
+            data = fetch_live_data()
+            if data:
+                analysis = analyze_data(data)
+                update_google_sheet(sheet, data, analysis)
+            time.sleep(UPDATE_INTERVAL)
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            time.sleep(UPDATE_INTERVAL)
 
 if __name__ == '__main__':
     main()
