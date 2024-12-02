@@ -93,6 +93,13 @@ def update_google_sheet(sheet, data, analysis):
     try:
         sheet.clear()
 
+        # Get current timestamp in IST
+        current_time = datetime.now(IST).strftime('%Y-%m-%d %H:%M:%S')
+
+        # Add last updated time at the top of the sheet
+        sheet.append_row(['Last Updated', current_time])
+        sheet.append_row([])  # Add an empty row for spacing
+
         headers = [
             'Cryptocurrency Name',
             'Symbol',
@@ -134,11 +141,10 @@ def update_google_sheet(sheet, data, analysis):
             analysis['lowest_change']['quote']['USD']['percent_change_24h']
         ])
 
-        print(f"Google Sheet updated at {datetime.now(IST).strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"Google Sheet updated at {current_time}")
 
     except Exception as e:
         print(f"Error updating Google Sheet: {e}")
-
 def main():
     sheet = authenticate_google_sheet()
     if not sheet:
