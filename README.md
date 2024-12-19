@@ -1,5 +1,10 @@
 # Crypto Puller Documentation  
 
+## Links  
+- **Colab Notebook**: <a href="https://colab.research.google.com/drive/1FKzXdWvJwXHnZp8Ar1L6Dp_IEJuUNHig?usp=sharing" target="_blank">Open Colab Notebook</a>
+- **Live Google Sheets**: <a href="https://docs.google.com/spreadsheets/d/1vXTteq2185As4JFhXtyL-m2q_x2lUg-FmiFTW2-6Nf0/edit?usp=sharing" target="_blank">View Live Sheets</a>
+- **Analysis Document**: <a href="https://docs.google.com/document/d/1z2ecXkBtOH-8sOS8bRwamxZ6jBShBT_71y2JUFcrF08/edit?usp=sharing" target="_blank">Read Analysis</a>
+
 ## Overview  
 **Crypto Puller** is an automated tool designed to:  
 1. Fetch live cryptocurrency data from the **CoinMarketCap API**.  
@@ -22,7 +27,3 @@
 2. **Run the Code**  
 3. Navigate to the **Live Sheets** link to view the updated data.  
 
-## Links  
-- **Colab Notebook**: <a href="https://colab.research.google.com/drive/1FKzXdWvJwXHnZp8Ar1L6Dp_IEJuUNHig?usp=sharing" target="_blank">Open Colab Notebook</a>
-- **Live Google Sheets**: <a href="https://docs.google.com/spreadsheets/d/1vXTteq2185As4JFhXtyL-m2q_x2lUg-FmiFTW2-6Nf0/edit?usp=sharing" target="_blank">View Live Sheets</a>
-- **Analysis Document**: <a href="https://docs.google.com/document/d/1z2ecXkBtOH-8sOS8bRwamxZ6jBShBT_71y2JUFcrF08/edit?usp=sharing" target="_blank">Read Analysis</a>
